@@ -1,6 +1,5 @@
 name: DevSecOps Pipeline
 
-# Triggers the workflow on push or pull request events
 on:
   push:
     branches: [ "main" ]
@@ -13,11 +12,10 @@ jobs:
     
     steps:
     - name: Checkout code
-      uses: actions/checkout@v3
+      uses: actions/checkout@v4 # Updated from v3
 
-    # Static Application Security Testing (SAST) with SonarCloud
     - name: SonarCloud Scan
-      uses: SonarSource/sonarcloud-github-action@master
+      uses: SonarSource/sonarcloud-github-action@v2.1.2 # Updated to a more recent version
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
@@ -26,22 +24,19 @@ jobs:
           -Dsonar.organization=<YOUR_SONARCLOUD_ORG_KEY>
           -Dsonar.projectKey=<YOUR_SONARCLOUD_PROJECT_KEY>
 
-    # Software Composition Analysis (SCA) with OWASP Dependency-Check
     - name: Dependency Check
-      uses: dependency-check/action@v3
+      uses: dependency-check/action@v4 # Updated from v3
       id: dependency-check
       with:
         project: 'my-flask-app'
         format: 'HTML,JSON'
         out: 'dependency-check-report'
 
-    # Build the Docker image
     - name: Build Docker image
       run: docker build -t my-devsecops-app .
 
-    # Archive the reports as artifacts
     - name: Upload Dependency Check Report
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4 # Updated from v3
       with:
         name: dependency-check-report
         path: dependency-check-report/dependency-check-report.html
