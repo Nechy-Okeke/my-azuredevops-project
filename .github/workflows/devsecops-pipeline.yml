@@ -11,35 +11,32 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-      - name: Checkout code
-        uses: actions/checkout@v4
+    - name: Checkout code
+      uses: actions/checkout@v4
 
-      - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@v2
-        env:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
-        with:
-          args: >
-            -Dsonar.organization=nechy-okeke
-            -Dsonar.projectKey=Nechy-Okeke_my-devsecops-app
+    - name: SonarCloud Scan
+      uses: SonarSource/sonarcloud-github-action@v2
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
+      with:
+        args: >
+          -Dsonar.organization=<YOUR_SONARCLOUD_ORG_KEY>
+          -Dsonar.projectKey=<YOUR_SONARCLOUD_PROJECT_KEY>
 
-      - name: Dependency Check
-        uses: dependency-check/Dependency-Check_Action@1.1.0
-        id: dependency-check
-        with:
-          project: 'my-flask-app'
-          path: '.'
-          format: 'ALL'
-          out: 'dependency-check-report'
-          args: >
-            --prettyPrint
+    - name: Dependency Check
+      uses: dependency-check/action@v4
+      id: dependency-check
+      with:
+        project: 'my-flask-app'
+        format: 'HTML,JSON'
+        out: 'dependency-check-report'
 
-      - name: Build Docker image
-        run: docker build -t my-devsecops-app .
+    - name: Build Docker image
+      run: docker build -t my-devsecops-app .
 
-      - name: Upload Dependency Check Report
-        uses: actions/upload-artifact@v4
-        with:
-          name: dependency-check-report
-          path: dependency-check-report/dependency-check-report.html
+    - name: Upload Dependency Check Report
+      uses: actions/upload-artifact@v4
+      with:
+        name: dependency-check-report
+        path: dependency-check-report/dependency-check-report.html
