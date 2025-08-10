@@ -21,8 +21,8 @@ jobs:
         SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}
       with:
         args: >
-          -Dsonar.organization=<YOUR_SONARCLOUD_ORG_KEY>
-          -Dsonar.projectKey=<YOUR_SONARCLOUD_PROJECT_KEY>
+          -Dsonar.organization=nechy-okeke
+          -Dsonar.projectKey=my-devsecops-app
 
     - name: Dependency Check
       uses: dependency-check/Dependency-Check_Action@1.1.0
